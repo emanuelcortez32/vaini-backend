@@ -138,22 +138,6 @@
 							<outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${project.basedir}/src/main/frontend/build/static/</directory>
-									<filtering>false</filtering>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-resources</id>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.outputDirectory}/templates</outputDirectory>
-							<resources>
-								<resource>
 									<directory>${project.basedir}/src/main/frontend/build/</directory>
 									<filtering>false</filtering>
 								</resource>

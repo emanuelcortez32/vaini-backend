@@ -5,6 +5,7 @@ const path = require('path');
 const webpack = require('webpack');
 const resolve = require('resolve');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ThymeleafInjectWebpackPlugin = require('thymeleaf-inject-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -576,10 +577,11 @@ module.exports = function (webpackEnv) {
                 minify: {
                   removeComments: true,
                   collapseWhitespace: true,
-                  removeRedundantAttributes: true,
-                  useShortDoctype: true,
+                  removeRedundantAttributes: false,
+                  useShortDoctype: false,
                   removeEmptyAttributes: true,
-                  removeStyleLinkTypeAttributes: true,
+                  removeStyleLinkTypeAttributes: false,
+                  removeScriptTypeAttributes: false,
                   keepClosingSlash: true,
                   minifyJS: true,
                   minifyCSS: true,
@@ -589,6 +591,7 @@ module.exports = function (webpackEnv) {
             : undefined
         )
       ),
+      //new ThymeleafInjectWebpackPlugin(),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
       // https://github.com/facebook/create-react-app/issues/5358

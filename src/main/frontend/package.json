@@ -143,5 +143,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "thymeleaf-inject-webpack-plugin": "github:nkb84/thymeleaf-inject-webpack-plugin"
   }
 }
