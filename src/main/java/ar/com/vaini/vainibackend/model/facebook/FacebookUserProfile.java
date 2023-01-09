@@ -1,5 +1,6 @@
 package ar.com.vaini.vainibackend.model.facebook;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 

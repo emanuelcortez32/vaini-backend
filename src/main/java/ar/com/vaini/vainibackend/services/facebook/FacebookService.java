@@ -2,7 +2,7 @@ package ar.com.vaini.vainibackend.services.facebook;
 
 import ar.com.vaini.vainibackend.model.facebook.*;
 
-public interface IFacebookService {
+public interface FacebookService {
     String authUser(String facebookToken) throws Exception;
 
     FacebookPageAccount getPages(String facebookToken) throws Exception;

@@ -16,7 +16,7 @@ public class UserDetails extends User implements org.springframework.security.co
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles()
                 .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());
     }
 

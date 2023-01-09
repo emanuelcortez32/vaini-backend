@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class FacebookService implements  IFacebookService {
+public class FacebookServiceImpl implements FacebookService {
 
     @Autowired
     private UserServiceImpl userServiceImpl;
@@ -30,10 +30,9 @@ public class FacebookService implements  IFacebookService {
     public String authUser(String facebookToken) throws Exception {
 
         FacebookUserProfile facebookUserProfile = facebookClient.getFacebookUserProfile(facebookToken);
-        Set<Role> baseRoles = new HashSet<>(){{
-            add(Role.FACEBOOK_USER);
-            add(Role.MANAGE_MESSAGES);
-            add(Role.MANAGE_ORDERS);
+        Set<String> baseRoles = new HashSet<>(){{
+            add(Role.FACEBOOK_USER.getName());
+            add(Role.MANAGE_ORDERS.getName());
         }};
 
         return userServiceImpl.findUserById(facebookUserProfile.getIdUser())

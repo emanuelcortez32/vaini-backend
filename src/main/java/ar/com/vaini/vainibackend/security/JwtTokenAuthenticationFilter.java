@@ -5,6 +5,7 @@ import ar.com.vaini.vainibackend.model.Role;
 import ar.com.vaini.vainibackend.model.User;
 import ar.com.vaini.vainibackend.model.UserDetails;
 import ar.com.vaini.vainibackend.services.UserService;
+import ar.com.vaini.vainibackend.services.UserServiceImpl;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -60,17 +61,18 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter  {
             Claims claims = tokenProvider.getClaimsFromJWT(token);
             String username = claims.getSubject();
 
-            Set<Role> roles = new HashSet<>();
+            UsernamePasswordAuthenticationToken authenticationToken = userService.findByUserName(username)
+                    .map(UserDetails::new)
+                    .map(userDetails -> {
+                        UsernamePasswordAuthenticationToken authentication =
+                                new UsernamePasswordAuthenticationToken(
+                                        userDetails, null, userDetails.getAuthorities());
+                        authentication
+                                .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-            roles.add(Role.FACEBOOK_USER);
-
-            User fakeUser = User.builder().email("email").id("121212").active(true).roles(roles).build();
-
-            User user = userService.findUserById(username).orElse(fakeUser);
-            UserDetails userDetails = new UserDetails(user);
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        return authentication;
+                    })
+                    .orElse(null);
 
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         } else {

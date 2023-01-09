@@ -36,7 +36,7 @@ public class HelpersSecurity {
     public static User convertToUser(FacebookUserProfile facebookUserProfile) {
         return User.builder()
                 .id(facebookUserProfile.getIdUser())
-                .name(facebookUserProfile.getFirstName() + facebookUserProfile)
+                .name(facebookUserProfile.getFirstName())
                 .lastName(facebookUserProfile.getLastName())
                 .email(facebookUserProfile.getEmail())
                 .username(HelpersSecurity.generateUsername(facebookUserProfile.getFirstName(), facebookUserProfile.getLastName()))

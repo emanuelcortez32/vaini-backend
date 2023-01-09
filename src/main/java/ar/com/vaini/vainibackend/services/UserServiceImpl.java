@@ -12,12 +12,11 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
-public class UserService implements IUserService {
+public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtTokenProvider tokenProvider;
-
     @Autowired
     private UserRepository userRepository;
 
@@ -25,13 +24,15 @@ public class UserService implements IUserService {
         return userRepository.findById(userId);
     }
 
-    public User registerUser(User user, Set<Role> roles) {
-
-        if (userRepository.existsByUserName(user.getUsername())) return null;
-
+    public User registerUser(User user, Set<String> roles) {
         user.setActive(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(roles);
-        return user;
+        return userRepository.save(user);
+    }
+
+    @Override
+    public Optional<User> findByUserName(String username) {
+        return userRepository.findByUsername(username);
     }
 }

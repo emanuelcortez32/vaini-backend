@@ -2,13 +2,13 @@ package ar.com.vaini.vainibackend.repositories;
 
 import ar.com.vaini.vainibackend.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-public interface IUserRepository extends MongoRepository<User, String> {
-
-     User save(User user);
-    Optional<User> findById(String userId);
-
-    Boolean existsByUserName(String userName);
+@Repository
+public interface UserRepository extends MongoRepository<User, String> {
+    @Query("{'username' : ?0}")
+    Optional<User> findByUsername(String username);
 }
