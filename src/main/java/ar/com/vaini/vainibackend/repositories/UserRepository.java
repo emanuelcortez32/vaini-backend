@@ -1,24 +1,14 @@
 package ar.com.vaini.vainibackend.repositories;
 
 import ar.com.vaini.vainibackend.model.User;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;
 
-@Repository
-public class UserRepository implements IUserRepository {
-    @Override
-    public User save(User user) {
-        return user;
-    }
+public interface IUserRepository extends MongoRepository<User, String> {
 
-    @Override
-    public Optional<User> findById(String userId) {
-        return Optional.empty();
-    }
+     User save(User user);
+    Optional<User> findById(String userId);
 
-    @Override
-    public Boolean existsByUserName(String userName) {
-        return false;
-    }
+    Boolean existsByUserName(String userName);
 }

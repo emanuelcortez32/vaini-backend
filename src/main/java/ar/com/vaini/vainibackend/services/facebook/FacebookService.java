@@ -1,69 +1,15 @@
 package ar.com.vaini.vainibackend.services.facebook;
 
-import ar.com.vaini.vainibackend.client.FacebookClient;
-import ar.com.vaini.vainibackend.model.Role;
-import ar.com.vaini.vainibackend.model.UserDetails;
-import ar.com.vaini.vainibackend.helpers.HelpersSecurity;
 import ar.com.vaini.vainibackend.model.facebook.*;
-import ar.com.vaini.vainibackend.security.JwtTokenProvider;
-import ar.com.vaini.vainibackend.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.stereotype.Service;
 
-import java.io.UnsupportedEncodingException;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+public interface IFacebookService {
+    String authUser(String facebookToken) throws Exception;
 
-@Service
-public class FacebookService implements  IFacebookService {
+    FacebookPageAccount getPages(String facebookToken) throws Exception;
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private FacebookClient facebookClient;
+    FacebookUserProfile getProfile(String facebookToken) throws Exception;
 
-    @Autowired
-    private JwtTokenProvider tokenProvider;
+    FacebookPageInstagramAccount getFacebookPageInstagramBusinessAccounts(String idPage, String facebookToken) throws Exception;
 
-    public String authUser(String facebookToken) throws Exception {
-
-        FacebookUserProfile facebookUserProfile = facebookClient.getFacebookUserProfile(facebookToken);
-        Set<Role> baseRoles = new HashSet<>(){{
-            add(Role.FACEBOOK_USER);
-            add(Role.MANAGE_MESSAGES);
-            add(Role.MANAGE_ORDERS);
-        }};
-
-        return userService.findUserById(facebookUserProfile.getIdUser())
-                .or(() -> Optional.ofNullable(userService.registerUser(HelpersSecurity.convertToUser(facebookUserProfile), baseRoles)))
-                .map(UserDetails::new)
-                .map(userDetails -> new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities()))
-                .map(usernamePasswordAuthenticationToken -> {
-                    try {
-                        return tokenProvider.generateToken(usernamePasswordAuthenticationToken);
-                    } catch (UnsupportedEncodingException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .orElseThrow(() -> new Exception("unable to login facebook user id " + facebookUserProfile.getIdUser()));
-    }
-    public FacebookPageAccount getPages(String facebookToken) throws Exception {
-       return facebookClient.getFacebookUserPages(facebookToken);
-    }
-
-    public FacebookUserProfile getProfile(String facebookToken) throws Exception {
-        return facebookClient.getFacebookUserProfile(facebookToken);
-    }
-
-    @Override
-    public FacebookPageInstagramAccount getFacebookPageInstagramBusinessAccounts(String idPage, String facebookToken) throws Exception {
-        return facebookClient.getFacebookPageInstagramBusinessAccounts(idPage, facebookToken);
-    }
-
-    @Override
-    public InstagramUserProfile getInstagramUserProfile(String idUser, String facebookToken) throws Exception {
-        return facebookClient.getInstagramUserProfile(idUser, facebookToken);
-    }
+    InstagramUserProfile getInstagramUserProfile(String idUser, String facebookToken) throws Exception;
 }
