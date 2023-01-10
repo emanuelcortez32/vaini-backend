@@ -1,6 +1,7 @@
 package ar.com.vaini.vainibackend.security;
 
 import ar.com.vaini.vainibackend.configuration.JwtConfig;
+import ar.com.vaini.vainibackend.model.UserDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -23,10 +24,12 @@ public class JwtTokenProvider {
     }
 
     public String generateToken(Authentication authentication) throws UnsupportedEncodingException {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         long now = System.currentTimeMillis();
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("authorities", authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                .claim("id", userDetails.getId())
                 .setIssuedAt(new Date(now))
                 .setExpiration(new Date(now + jwtConfig.getExpiration() * 1000L))  // in milliseconds
                 .signWith(getSigningKey(jwtConfig.getSecret()), SignatureAlgorithm.HS256)

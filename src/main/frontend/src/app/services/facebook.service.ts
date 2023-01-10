@@ -9,6 +9,8 @@ export const login = (): Promise<FBAuthResponse> => {
     "pages_read_engagement",
     "instagram_basic",
     "instagram_manage_messages",
+    "catalog_management",
+    "business_management"
   ].toString();
   return new Promise((resolve) => {
     FB.login(
