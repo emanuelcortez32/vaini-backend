@@ -19,11 +19,11 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     @Value("${db.name:vaini}")
     private String databaseName;
 
-    @Value("${db.host:localhost}")
-    private String databaseHost;
+    @Value("${db.user}")
+    private String databaseUser;
 
-    @Value("${db.port:27017}")
-    private String databasePort;
+    @Value("${db.password}")
+    private String databasePassword;
 
     @Override
     protected String getDatabaseName() {
@@ -32,7 +32,8 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
 
     @Override
     public MongoClient mongoClient() {
-        final ConnectionString connectionString = new ConnectionString("mongodb://" + databaseHost + ":" + databasePort + "/" + databaseName);
+        final String connection = String.format("mongodb+srv://%s:%s@cluster0.u6flvrh.mongodb.net/%s?retryWrites=true&w=majority",databaseUser, databasePassword, databaseName);
+        final ConnectionString connectionString = new ConnectionString(connection);
         final MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
                 .build();
